@@ -1,7 +1,7 @@
 defmodule Circle do
   import :math, only: [sqrt: 1, sin: 1, cos: 1]
 
-  def get(r), do: radial(r)
+  def get(z), do: radial(z)
 
   def radial(r) do
     Enum.map(0..360, fn θ -> {r * cos(θ), r * sin(θ)} end)

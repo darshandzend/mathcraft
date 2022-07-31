@@ -27,6 +27,12 @@ defmodule Frames do
     )
   end
 
+  @doc """
+  Helpful function to visualise the blocks right in the console screen.
+  Your terminal might not render 3D, so instead this function treats z axis
+  as 'time axis' and shows you how the top-view cross section might look
+  like, layer by layer. Also a nice function to just play around with.
+  """
   def animate(frames, %{fps: framerate}, canvas_size = {_, _}) do
     Enum.each(frames, fn frame ->
       IEx.Helpers.clear()

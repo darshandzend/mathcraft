@@ -1,11 +1,12 @@
 defmodule Example do
+  @moduledoc """
+  "Demo" functions to show how the interface can be used.
+  """
   @canvas_size {41, 41}
   @center {20, 20}
   def circles do
-    radii = Enum.to_list(0..15) 
-            ++ Enum.to_list(14..0)
-            ++ Enum.to_list(0..15) 
-    frames = Enum.map(radii, fn z ->
+    z_range = Enum.to_list(15..0) ++ Enum.to_list(1..15)
+    frames = Enum.map(z_range, fn z ->
         Circle.get(z)
         |> Points.pixelate()
         |> Points.move_and_clip(@center, @canvas_size)
