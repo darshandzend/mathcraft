@@ -1,6 +1,6 @@
-defmodule Frames do
+defmodule Layers do
   @moduledoc """
-  A frame is a picture. That is, a 2D matrix, with rows and columns.
+  A layer is a picture. That is, a 2D matrix, with rows and columns.
   Here it is represented by a Map:
   %{
     0 => [1, 3, 4, 5],
@@ -11,13 +11,13 @@ defmodule Frames do
   """
 
   @doc """
-  Converts a list of points expressed in {x,y} into a 2D frame.
+  Converts a list of points expressed in {x,y} into a 2D layer.
   ## Example:
   iex> points = [{2,3}, {4,3}, {1, 2}, {3, 9}]
-  iex> Frames.to_frame(points)
+  iex> Layers.to_layer(points)
   %{2 => [1], 3 => [2, 4], 9 => [3]}
   """
-  def to_frame(points) do
+  def to_layer(points) do
     Enum.group_by(
       points,
       # these will be the keys
@@ -33,21 +33,23 @@ defmodule Frames do
   as 'time axis' and shows you how the top-view cross section might look
   like, layer by layer. Also a nice function to just play around with.
   """
-  def animate(frames, %{fps: framerate}, canvas_size = {_, _}) do
-    Enum.each(frames, fn frame ->
+  def animate(layers, %{fps: framerate}, canvas_size = {_, _}) do
+    Enum.each(layers, fn layer ->
       IEx.Helpers.clear()
-      draw_frame(frame, canvas_size)
-      :timer.sleep(round(1000/framerate))
+      draw_layer(layer, canvas_size)
+      :timer.sleep(round(1000 / framerate))
     end)
   end
 
-  def draw_frame(frame, {height, width}) do
-    IO.write Enum.reverse(0..(height - 1))
-    |> Enum.map(fn y -> next_line(frame[y], width) end)
+  def draw_layer(layer, {height, width}) do
+    IO.write(
+      Enum.reverse(0..(height - 1))
+      |> Enum.map(fn y -> next_line(layer[y], width) end)
+    )
   end
 
   @empty "  "
-  @fill  "🟥"
+  @fill "🟥"
   # Helpful website to browse unicode blocks:
   # https://unicode-search.net/unicode-namesearch.pl
   defp next_line(nil, width) do
@@ -55,10 +57,11 @@ defmodule Frames do
   end
 
   defp next_line(line, width) do
-    list = Enum.map(0..(width-1), fn indx -> 
-      if indx in line, do: @fill, else: @empty
-    end)
+    list =
+      Enum.map(0..(width - 1), fn indx ->
+        if indx in line, do: @fill, else: @empty
+      end)
+
     List.to_string(list) <> "\n"
   end
-
 end
